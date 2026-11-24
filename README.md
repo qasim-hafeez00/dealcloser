@@ -6,7 +6,8 @@
 |---|---|
 | Live website | **https://dealcloser.onrender.com** (admin demo login: `admin@apexmotors.demo` / `12345`) |
 | Agent API | **https://dealcloser-api.onrender.com**: `POST /chat`, `GET /health`, docs at [`/docs`](https://dealcloser-api.onrender.com/docs) |
-| Demo video | `<VIDEO_URL>` |
+| Source code | **https://github.com/qasim-hafeez00/dealcloser** |
+| Demo video | **https://youtu.be/rGDi_6IT2QM** (3 min, narrated) |
 | Hosting note | Both services run on Render's free plan and are kept warm by a 10-minute keepalive. If one has been idle, the first request can take ~50 s while it wakes. |
 | Track | **DealCloser**, plus a bonus **GrowthPilot** integration (AI follow-up drafting for quiet leads) |
 
