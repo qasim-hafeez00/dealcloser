@@ -26,10 +26,10 @@ function load(): { thread: string; msgs: Msg[] } {
   return { thread: newThread(), msgs: [] };
 }
 
-function RichText({ text }: { text: string }) {
+function Ids({ text }: { text: string }) {
   const parts = text.split(/(APX-\d{3}|TD-\d+|CB-\d+)/g);
   return (
-    <span className="whitespace-pre-wrap">
+    <>
       {parts.map((p, i) =>
         /^APX-\d{3}$/.test(p) ? (
           <Link key={i} href={`/inventory/${p}`} className="rounded bg-brand-50 px-1 font-mono text-[12px] font-semibold text-brand-700 hover:underline">{p}</Link>
@@ -37,6 +37,23 @@ function RichText({ text }: { text: string }) {
           <span key={i} className="rounded bg-emerald-50 px-1 font-mono text-[12px] font-semibold text-emerald-700">{p}</span>
         ) : (
           <span key={i}>{p}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+// Light markdown: **bold**, "- " bullets, car/booking IDs as chips. Stray ** are dropped.
+function RichText({ text }: { text: string }) {
+  const src = text.replace(/^(\s*)[-*] +/gm, "$1• ").replace(/^#{1,6} +/gm, "");
+  const parts = src.split(/(\*\*[^*\n]+?\*\*)/g);
+  return (
+    <span className="whitespace-pre-wrap">
+      {parts.map((p, i) =>
+        /^\*\*[^*\n]+?\*\*$/.test(p) ? (
+          <strong key={i} className="font-semibold"><Ids text={p.slice(2, -2).trim()} /></strong>
+        ) : (
+          <Ids key={i} text={p.replace(/\*\*/g, "")} />
         ),
       )}
     </span>
