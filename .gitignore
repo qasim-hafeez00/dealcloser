@@ -1,0 +1,25 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# node
+node_modules/
+.next/
+out/
+
+# misc
+.DS_Store
+bench/results*.json
+.neon
+.claude/
+web/.next/
+web/next-env.d.ts
+*.tsbuildinfo
+skills-lock.json
