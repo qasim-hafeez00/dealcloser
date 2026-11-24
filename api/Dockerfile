@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt "uvicorn[standard]==0.54.0"
 COPY --chown=app . .
 USER app
 EXPOSE 7860
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860", "--workers", "1", "--proxy-headers", "--forwarded-allow-ips", "*", "--timeout-keep-alive", "75"]
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860} --workers 1 --proxy-headers --forwarded-allow-ips '*' --timeout-keep-alive 75"]
