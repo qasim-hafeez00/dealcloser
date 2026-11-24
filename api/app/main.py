@@ -270,7 +270,7 @@ async def followup_draft(request: Request):
            "bookings": [{**dict(b), "slot": b["slot"].isoformat()} for b in bookings],
            "recent_chat": [dict(r) for r in reversed(recent)]}
     from langchain_anthropic import ChatAnthropic
-    llm = ChatAnthropic(model=config.MODEL, max_tokens=700, default_request_timeout=30, max_retries=2,
+    llm = ChatAnthropic(model=config.MODEL, max_tokens=2048, default_request_timeout=30, max_retries=2,  # adaptive thinking shares this budget
                         output_config={"effort": "low"})
     limit = "under 300 characters" if channel == "sms" else "under 110 words, with a subject line first"
     msg = await llm.ainvoke([
@@ -283,6 +283,8 @@ async def followup_draft(request: Request):
     from .graph import text_of
     draft = text_of(msg).strip()
     u = msg.usage_metadata or {}
+    if not draft:  # e.g. the whole budget went to thinking: never store or show a blank draft
+        return JSONResponse({"error": "draft came back empty, please try again"}, status_code=502)
     row = await db.fetchrow(
         "INSERT INTO followups (user_id, channel, draft, tokens_in, tokens_out) VALUES (%s,%s,%s,%s,%s) RETURNING id",
         user_id, channel, draft, u.get("input_tokens", 0), u.get("output_tokens", 0))
